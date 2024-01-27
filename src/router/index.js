@@ -18,12 +18,32 @@ const routes = [
   {
     path: '/padres',
     name: 'HomePadres',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Padres/HomePadres.vue')
+    component: () => import('../views/Padres/HomePadres.vue')
   },
   {
-    path: '//padres/registro',
+    path: '/padres/registro',
     name: 'RegistroPadres',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Padres/RegistroPadres.vue')
+    component: () => import('../views/Padres/RegistroPadres.vue')
+  },
+  {
+    path: '/padre-con-hijos/:dniPadre',
+    name: 'RelacionPadres',
+    component: () => import('../views/Padres/RegistroPadres.vue')
+  },
+	{
+    path: '/alumnos',
+    name: 'HomeAlumnos',
+    component: () => import('../views/Alumnos/HomeAlumnos.vue')
+  },
+	{
+    path: '/reuniones',
+    name: 'HomeReuniones',
+    component: () => import('../views/Reuniones/HomeReuniones.vue')
+  },
+	{
+    path: '/reunion/:idReunion/detallado',
+    name: 'DetalleReunion',
+    component: () => import('../views/Reuniones/DetalleReunion.vue')
   },
 ]
 

@@ -1,5 +1,5 @@
 <template>
-	<h1>Registro de padres</h1>
+	<h1>Registro de padres e hijos</h1>
 	<p>Rellene los campos:</p>
 
 	<div class="row">
@@ -23,13 +23,25 @@
 			</select>
 
 			<div class="d-flex justify-content-between mt-2">
-				<router-link to="/padres" class="btn btn-outline-secondary">Volver</router-link>
-				<button class="btn btn-outline-success" @click="registrar()">Registrar</button>
+				<router-link to="/padres" class="btn btn-outline-secondary" @click="$emit('actualizarPadres')"><i class="bi bi-arrow-bar-left"></i> Volver</router-link>
+				<button v-if="!editar" class="btn btn-outline-success" @click="registrar()"><i class="bi bi-floppy"></i> Registrar datos</button>
+				<button v-if="editar" class="btn btn-outline-warning" @click="registrar()"><i class="bi bi-floppy"></i> Actualizar datos</button>
 			</div>
 		</div>
 		<div class="col-5">
 			<p class="fw-bold">Registro de hijos</p>
-			<button class="btn btn-outline-warning" @click="panelNuevoHijo()">Agregar nuevo hijo</button>
+			<button class="btn btn-outline-warning" @click="panelNuevoHijo()"><i class="bi bi-plus"></i> Agregar nuevo hijo</button>
+			<div class="mt-2" v-if="hijos.length>0" >
+				<ol class="list-group list-group-numbered">
+					<li class="list-group-item d-flex justify-content-between align-items-start" v-for="(hija, index) in hijos">
+						<div class="ms-2 me-auto">
+							<div class="fw-bold"> {{ hija.apellidos }} {{hija.nombres}}</div>
+							<span>{{hija.dni}}</span>
+						</div>
+						<button class="btn btn-danger btn-sm rounded-5" @click="quitarAlumno(index)"><i class="bi bi-x"></i></button>
+					</li>
+				</ol>
+			</div>
 
 		</div>
 	</div>
@@ -44,11 +56,11 @@
 				<div class="modal-body">
 					<p>Complete los siguientes datos</p>
 					<label for="">DNI</label>
-					<input type="text" class="form-control" autocomplete="off" v-model="hijo.dni">
+					<input type="text" class="form-control" autocomplete="off" v-model="hijo.dni" @blur="buscarDNIHijo()">
 					<label for="">Apellidos *</label>
-					<input type="text" class="form-control" autocomplete="off" v-model="hijo.nombres">
-					<label for="">Nombres *</label>
 					<input type="text" class="form-control" autocomplete="off" v-model="hijo.apellidos">
+					<label for="">Nombres *</label>
+					<input type="text" class="form-control" autocomplete="off" v-model="hijo.nombres">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="addHijo()">Agregar</button>
@@ -61,10 +73,21 @@
 export default{
 	name: 'RegistroPadres',
 	data(){ return {
-		apoderado:{dni:'', nombres:'', apellidos:'', idRelacion:1, id:-1}, hijos:{}, hijo:{ id:-1, dni:'', nombres:'', apellidos:''}
+		apoderado:{dni:'', nombres:'', apellidos:'', celular:'', idRelacion:1, id:-1}, hijos:[], hijo:{ id:-1, dni:'', nombres:'', apellidos:''}, editar:false
 	}},
+	mounted(){
+		if( this.$route.params.dniPadre ){
+			this.editar = true;
+			this.apoderado.dni = this.$route.params.dniPadre
+			this.buscarDNI();
+		}
+	},
 	methods:{
 		panelNuevoHijo(){
+			this.hijo.id = -1
+			this.hijo.nombres = ''
+			this.hijo.apellidos = ''
+			this.hijo.dni = ''
 			const myModalAlternative = new bootstrap.Modal('#modalNuevoHijo')
 			myModalAlternative.show()
 		},
@@ -80,12 +103,32 @@ export default{
 					this.apoderado.apellidos = res.data.apoderado.apellidos
 					this.apoderado.celular = res.data.apoderado.celular
 					this.apoderado.idRelacion = res.data.apoderado.idRelacion
+					this.hijos = res.data.hijos
+				}
+			})
+		},
+		buscarDNIHijo(){
+			let datos = new FormData()
+			datos.append('pedir', 'buscarDNI')
+			datos.append('dni', this.hijo.dni)
+			this.axios.post(this.servidor + 'Alumno.php', datos)
+			.then(res => {
+				if( res.data.conteo>0 ){
+					this.hijo.id = res.data.alumno.id
+					this.hijo.nombres = res.data.alumno.nombres
+					this.hijo.apellidos = res.data.alumno.apellidos
+					this.hijo.dni = res.data.alumno.dni
 				}
 			})
 		},
 		addHijo(){
 			if(this.hijo.nombres !='' && this.hijo.apellidos!='' ){
-				//guardar
+				this.hijos.push({
+					id: this.hijo.id,
+					nombres: this.hijo.nombres,
+					apellidos: this.hijo.apellidos,
+					dni: this.hijo.dni
+				})
 			}else{
 				alert('faltan datos por rellenar')
 			}
@@ -99,10 +142,32 @@ export default{
 				let datos = new FormData()
 				datos.append('pedir', 'crearApoderado')
 				datos.append('apoderado', JSON.stringify(this.apoderado))
+				datos.append('hijos', JSON.stringify(this.hijos))
 				this.axios.post(this.servidor + 'Apoderado.php', datos)
-				.then(res => console.log(res.data))
+				.then(res =>{
+					if (res.data.idPadre){
+						alertify.message('Guardado exitoso', 10);
+						this.limpiar()
+					}
+				})
 				
 			}
+		},
+		quitarAlumno(index){
+			this.hijos.splice(index, 1)
+		},
+		limpiar(){
+			this.hijos = [];
+			this.hijo.nombres = ''
+			this.hijo.apellidos = ''
+			this.hijo.dni = ''
+			this.hijo.id = -1
+			this.apoderado.id = -1
+			this.apoderado.dni = ''
+			this.apoderado.nombres = ''
+			this.apoderado.apellidos = ''
+			this.apoderado.celular = ''
+			this.apoderado.idRelacion = 1
 		}
 	}
 }
