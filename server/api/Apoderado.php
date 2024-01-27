@@ -83,7 +83,7 @@ function listar30Apoderados($db){
 
 function buscarApoderados($db){
 	$filas = [];
-	$sql = $db->prepare("SELECT * FROM `padre` WHERE (dni = '{$_POST['texto']}' or concat(apellidos,' ', nombres) like '{$_POST['texto']}%' or concat( nombres,' ',apellidos) like '{$_POST['texto']}%' or celular ='{$_POST['texto']}')  and activo = 1 order by apellidos;");
+	$sql = $db->prepare("SELECT * FROM `padre` WHERE (dni = '{$_POST['texto']}' or concat(apellidos,' ', nombres) like '{$_POST['texto']}%' or concat( nombres,' ',apellidos) like '{$_POST['texto']}%' or celular ='{$_POST['texto']}')  and activo = 1 order by apellidos asc;");
 	if($sql->execute()){
 		while($rows = $sql->fetch(PDO::FETCH_ASSOC))
 			$filas[] = $rows;

@@ -45,6 +45,16 @@ const routes = [
     name: 'DetalleReunion',
     component: () => import('../views/Reuniones/DetalleReunion.vue')
   },
+	{
+    path: '/deudas',
+    name: 'HomeDeudas',
+    component: () => import('../views/Deudas/HomeDeudas.vue')
+  },
+	{
+    path: '/deuda/:idDeuda/detallado',
+    name: 'DetalleDeudas',
+    component: () => import('../views/Deudas/DetalleDeudas.vue')
+  },
 ]
 
 const router = createRouter({

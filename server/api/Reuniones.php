@@ -31,7 +31,7 @@ function listar($db){
 
 function detalles($db){
 	$filas = [];
-	$sql = $db->prepare("SELECT * FROM `reunion` as r inner join grados g on g.id = r.idGrado where r.id = ? order by r.id desc;");
+	$sql = $db->prepare("SELECT * FROM `reunion` as r inner join grados g on g.id = r.idGrado where r.id = ? ;");
 	if($sql->execute([ $_POST['idReunion'] ])){
 		while($rows = $sql->fetch(PDO::FETCH_ASSOC))
 			$filas[] = $rows;

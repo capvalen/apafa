@@ -20,8 +20,8 @@
 		<tbody>
 			<tr v-for="(padre, index) in apoderados" :key="padre.id">
 				<td>{{ index+1 }}</td>
-				<td>{{ padre.apellidos }}</td>
-				<td>{{ padre.nombres }}</td>
+				<td class="text-capitalize">{{ padre.apellidos }}</td>
+				<td class="text-capitalize">{{ padre.nombres }}</td>
 				<td>{{ padre.dni }}</td>
 				<td>{{ padre.celular }}</td>
 				<td>

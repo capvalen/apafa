@@ -3,8 +3,8 @@
 	<button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaReunion"><i class="bi bi-plus-circle"></i> Nueva reunión</button>
 	<div class="row">
 		<div class="col-4">
-			<label for="">Buscar padre</label>
-			<input type="text" class="form-control" placeholder="Búsqueda por DNI, Nombres o Celular" v-model="texto" @keyup.enter="buscarPadre()">
+			<label for="">Ubicar reunión</label>
+			<input type="text" class="form-control" placeholder="Búsqueda por asunto de reunión" v-model="texto" @keyup.enter="buscarPadre()">
 		</div>
 		<div class="col-3">
 			<label for="">Año</label>
@@ -34,7 +34,7 @@
 					<td>{{ fechaLatam(reunion.fecha) }}</td>
 					<td>{{ reunion.asunto }}</td>
 					<td>
-						<button class="btn btn-outline-primary btn-sm" title="Ver asistentes" @click="irAReunion(reunion.id)"><i class="bi bi-list-nested"></i></button>
+						<button class="btn btn-outline-primary btn-sm" title="Ver asistentes" @click="irAReunion(reunion.id)"><i class="bi bi-list-ul"></i></button>
 					</td>
 				</tr>
 			</tbody>
@@ -66,7 +66,7 @@
 
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" @click="crearReunion()"><i class="bi bi-plus-circle"></i> Crear reunión</button>
+					<button type="button" class="btn btn-primary" @click="crearReunion()" data-bs-dismiss="modal"><i class="bi bi-plus-circle"></i> Crear reunión</button>
 				</div>
 			</div>
 		</div>

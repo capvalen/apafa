@@ -1,3 +1,4 @@
 Actualizar datos de padre
 eliminar el hijo al momento de actualizar el padre.
 Devolver el ultimo grado matriculado
+Impresion automatica apenas se guarda el pago

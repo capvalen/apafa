@@ -1,5 +1,4 @@
 
-import { Axios } from 'axios';
 <template>
 	<h1>Reunión</h1>
 	<h3>Asunto: {{ reunion.asunto }} </h3>
@@ -83,8 +82,9 @@ export default{
 			return moment(fecha).format('DD/MM/YYYY');
 		},
 		queNivel(nivel){
-			if(nivel == '1') return 'Primaria'
-			if(nivel == '2') return 'Secundaria'
+			if(nivel == '1') return 'Inicial'
+			if(nivel == '2') return 'Primaria'
+			if(nivel == '3') return 'Secundaria'
 		},
 		encontrarApoderado(id){
 			const index = this.asistentes.findIndex(x=> x.id == id)
