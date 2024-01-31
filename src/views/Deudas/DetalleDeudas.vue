@@ -110,6 +110,7 @@ export default{
 			if(nivel == '1') return 'Inicial'
 			if(nivel == '2') return 'Primaria'
 			if(nivel == '3') return 'Secundaria'
+			if(nivel == '4') return 'Todos'
 		},
 		guardarPago(){
 			if( this.indexGlobal==-1 )
@@ -165,7 +166,7 @@ export default{
 		},
 		textoDivido(texto){
 			if(texto)
-				return texto.replace('\n', '<br>')
+				return texto.replaceAll('\n', '<br>')
 		},
 		imprimir(index){
 			let datos = new FormData();
