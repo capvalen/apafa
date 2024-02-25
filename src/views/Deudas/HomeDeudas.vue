@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-2">
 			<label for="">Buscar deuda</label>
-			<input type="text" class="form-control" placeholder="Búsqueda por asunto" v-model="texto" @keyup.enter="buscarPadre()">
+			<input type="text" class="form-control" placeholder="Búsqueda por asunto" v-model="texto" @keyup.enter="buscarDeudas()">
 		</div>
 		<div class="col-2">
 			<label for="">Nivel y Grado</label>
@@ -32,7 +32,7 @@
 			</select>
 		</div>
 		<div class="col-2 d-grid align-content-end">
-			<button class="btn btn-outline-primary"><i class="bi bi-search"></i> Buscar</button>
+			<button class="btn btn-outline-primary" @click="buscarDeudas()"><i class="bi bi-search"></i> Buscar</button>
 		</div>
 	</div>
 	<hr>
@@ -158,6 +158,13 @@ export default{
 					this.cargarDatos()
 				})
 			}
+		},
+		buscarDeudas(){
+			let datos = new FormData()
+			datos.append('pedir', 'buscar')
+			datos.append('texto', 'buscar')
+			this.axios.post(this.servidor+'Deudas.php', datos)
+			.then(resp => this.deudas = resp.data.deudas)
 		}
 	}
 }
