@@ -3,6 +3,7 @@ include('conexion.php');
 
 switch ($_POST['pedir']) {
 	case 'crear': crear($datab); break;
+	case 'buscar': buscar($datab); break;
 	case 'listar': listar($datab); break;
 	case 'detalles': detalles($datab); break;
 	case 'borrar': borrar($datab); break;
@@ -23,6 +24,16 @@ function listar($db){
 	$filas = [];
 	$sql = $db->prepare("SELECT * FROM `reunion` where activo = 1 order by id desc;");
 	if($sql->execute()){
+		while($rows = $sql->fetch(PDO::FETCH_ASSOC))
+			$filas[] = $rows;
+		echo json_encode( array('reuniones' => $filas, 'mensaje' => 'ok'));
+	}
+}
+
+function buscar($db){
+	$filas = [];
+	$sql = $db->prepare("SELECT * FROM `reunion` where activo = 1 and asunto like ? and year(fecha) = ? order by id desc;");
+	if($sql->execute([ $_POST['texto'] .'%', $_POST['año'] ])){
 		while($rows = $sql->fetch(PDO::FETCH_ASSOC))
 			$filas[] = $rows;
 		echo json_encode( array('reuniones' => $filas, 'mensaje' => 'ok'));

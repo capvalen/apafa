@@ -8,7 +8,7 @@ switch ($_POST['pedir']) {
 
 function listar($db){
 	$filas = [];
-	$sql = $db->prepare("SELECT * FROM `grados` as g inner join niveles as n on g.idNivel = n.id;");
+	$sql = $db->prepare("SELECT *, g.id as idGrado FROM `grados` as g inner join niveles as n on g.idNivel = n.id;");
 	if($sql->execute()){
 		while($rows = $sql->fetch(PDO::FETCH_ASSOC))
 			$filas[] = $rows;
