@@ -4,11 +4,11 @@
 	<div class="row">
 		<div class="col-2">
 			<label for="">Buscar deuda</label>
-			<input type="text" class="form-control" placeholder="Búsqueda por asunto" v-model="texto" @keyup.enter="buscarDeudas()">
+			<input type="text" class="form-control" placeholder="Búsqueda por asunto" v-model="filtro.texto" @keyup.enter="buscarDeudas()">
 		</div>
 		<div class="col-2">
 			<label for="">Nivel y Grado</label>
-			<select class="form-select" id="sltAños">
+			<select class="form-select" id="sltGrados" v-model="filtro.idGrado">
 				<option value="-1">Todos</option>
 				<option v-for="grado in grados" :value="grado.idGrado">
 					<span v-if="grado.numero!=0">{{ grado.numero }}°</span>
@@ -19,14 +19,14 @@
 		</div>
 		<div class="col-2">
 			<label for="">Año</label>
-			<select class="form-select" id="sltAños">
+			<select class="form-select" id="sltAños" v-model="filtro.año">
 				<option value="-1">Todos</option>
 				<option v-for="año in años" :value="año">{{ año }}</option>
 			</select>
 		</div>
 		<div class="col-2">
 			<label for="">Mes</label>
-			<select class="form-select" id="sltAños">
+			<select class="form-select" id="sltMeses" v-model="filtro.mes">
 				<option value="-1">Todos</option>
 				<option v-for="mes in meses" :value="mes.id">{{ mes.mes }}</option>
 			</select>
@@ -109,14 +109,13 @@
 import moment from 'moment'
 export default{
 	data(){ return {
-		años:[], grados:[], deudas:[], meses: [ { "id": 1, "mes": "Enero" }, { "id": 2, "mes": "Febrero" }, { "id": 3, "mes": "Marzo" }, { "id": 4, "mes": "Abril" }, { "id": 5, "mes": "Mayo" }, { "id": 6, "mes": "Junio" }, { "id": 7, "mes": "Julio" }, { "id": 8, "mes": "Agosto" }, { "id": 9, "mes": "Septiembre" }, { "id": 10, "mes": "Octubre" }, { "id": 11, "mes": "Noviembre" }, { "id": 12, "mes": "Diciembre" } ], deuda:{motivo:'', detalle:'', idGrado:18, monto:0, fecha: moment().format('YYYY-MM-DD') }
+		años:[], grados:[], deudas:[], meses: [ { "id": 1, "mes": "Enero" }, { "id": 2, "mes": "Febrero" }, { "id": 3, "mes": "Marzo" }, { "id": 4, "mes": "Abril" }, { "id": 5, "mes": "Mayo" }, { "id": 6, "mes": "Junio" }, { "id": 7, "mes": "Julio" }, { "id": 8, "mes": "Agosto" }, { "id": 9, "mes": "Septiembre" }, { "id": 10, "mes": "Octubre" }, { "id": 11, "mes": "Noviembre" }, { "id": 12, "mes": "Diciembre" } ], deuda:{motivo:'', detalle:'', idGrado:18, monto:0, fecha: moment().format('YYYY-MM-DD') }, filtro:{mes:-1, año:-1, idGrado:-1, texto:''}
 	}},
 	mounted(){
 		this.cargarDatos()
 		this.pedirGrados()
 		const actual = moment().format('Y')
-		console.log(actual)
-		for(let i= actual; i>=2024; i--)
+		for(let i= actual; i>=2023; i--)
 			this.años.push(i)
 	},
 	methods:{
@@ -162,7 +161,10 @@ export default{
 		buscarDeudas(){
 			let datos = new FormData()
 			datos.append('pedir', 'buscar')
-			datos.append('texto', 'buscar')
+			datos.append('texto', this.filtro.texto)
+			datos.append('año', this.filtro.año)
+			datos.append('mes', this.filtro.mes)
+			datos.append('idGrado', this.filtro.idGrado)
 			this.axios.post(this.servidor+'Deudas.php', datos)
 			.then(resp => this.deudas = resp.data.deudas)
 		}

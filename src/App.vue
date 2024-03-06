@@ -6,9 +6,10 @@
 				<ul class="list-group list-group-flush ">
 					<router-link to="/" class="list-group-item list-group-item-action"><i class="bi bi-house"></i> Inicio</router-link>
 					<router-link to="/padres" class="list-group-item list-group-item-action"><i class="bi bi-person-circle"></i> Padres</router-link>
-					<router-link to="/alumnos" class="list-group-item list-group-item-action"><i class="bi bi-file-earmark-person"></i> Alumnos</router-link>
+					<router-link to="/alumnos" class="list-group-item list-group-item-action"><i class="bi bi-backpack"></i> Alumnos</router-link>
 					<router-link to="/reuniones" class="list-group-item list-group-item-action"><i class="bi bi-person-workspace"></i> Reuniones</router-link>
-					<router-link to="/deudas" class="list-group-item list-group-item-action"><i class="bi bi-cash"></i> Deudas y pagos</router-link>
+					<router-link to="/deudas" class="list-group-item list-group-item-action"><i class="bi bi-piggy-bank"></i> Deudas y pagos</router-link>
+					<router-link to="/reportes" class="list-group-item list-group-item-action"><i class="bi bi-file-bar-graph"></i> Reportes</router-link>
 					
 					<li class="list-group-item list-group-item-action"><i class="bi bi-chat-dots"></i> Soporte</li>
 				</ul>

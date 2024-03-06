@@ -4,16 +4,16 @@
 	<div class="row">
 		<div class="col-4">
 			<label for="">Ubicar reunión</label>
-			<input type="text" class="form-control" placeholder="Búsqueda por asunto de reunión" v-model="texto" @keyup.enter="buscarPadre()">
+			<input type="text" class="form-control" placeholder="Búsqueda por asunto de reunión" v-model="texto" @keyup.enter="buscar()">
 		</div>
 		<div class="col-3">
 			<label for="">Año</label>
-			<select class="form-select" id="sltAños">
+			<select class="form-select" id="sltAños" v-model="queAño">
 				<option v-for="año in años" :value="año">{{ año }}</option>
 			</select>
 		</div>
 		<div class="col-3 d-grid align-content-end">
-			<button class="btn btn-outline-primary"><i class="bi bi-search"></i> Buscar</button>
+			<button class="btn btn-outline-primary" @click="buscar()"><i class="bi bi-search"></i> Buscar</button>
 		</div>
 	</div>
 	<hr>
@@ -76,7 +76,7 @@
 import moment from 'moment'
 export default{
 	data(){ return {
-		años:[], reunion:{ asunto:'', detalles:'', fecha: moment().format('YYYY-MM-DD'), idGrado:1, seccion:''}, grados:[], reuniones:[]
+		años:[], reunion:{ asunto:'', detalles:'', fecha: moment().format('YYYY-MM-DD'), idGrado:1, seccion:''}, grados:[], reuniones:[], queAño:null
 	}},
 	mounted(){
 		this.cargarDatos()
@@ -85,6 +85,7 @@ export default{
 		console.log(actual)
 		for(let i= actual; i>=2024; i--)
 			this.años.push(i)
+		this.queAño = actual
 	},
 	methods:{
 		pedirGrados(){
@@ -105,6 +106,14 @@ export default{
 			datos.append('reunion', JSON.stringify(this.reunion))
 			this.axios.post(this.servidor+'Reuniones.php', datos)
 			.then(resp => this.cargarDatos() )
+		},
+		buscar(){
+			let datos = new FormData()
+			datos.append('pedir', 'buscar')
+			datos.append('texto', this.texto )
+			datos.append('año', this.queAño )
+			this.axios.post(this.servidor+'Reuniones.php', datos)
+			.then(resp => this.reuniones = resp.data.reuniones )
 		},
 		fechaLatam(fecha){
 			return moment(fecha).format('DD/MM/YYYY');
