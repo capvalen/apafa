@@ -25,6 +25,7 @@
 					<th>N°</th>
 					<th>Fecha</th>
 					<th>Asunto</th>
+					<th>Categoría</th>
 					<th>@</th>
 				</tr>
 			</thead>
@@ -33,6 +34,7 @@
 					<td>{{ index+1 }}</td>
 					<td>{{ fechaLatam(reunion.fecha) }}</td>
 					<td>{{ reunion.asunto }}</td>
+					<td>{{ reunion.descripcion }}</td>
 					<td>
 						<button class="btn btn-outline-primary btn-sm" title="Ver asistentes" @click="irAReunion(reunion.id)"><i class="bi bi-list-ul"></i></button>
 					</td>

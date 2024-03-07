@@ -31,7 +31,10 @@
 	</div>
 	<hr>
 	<div class="row">
-		<div class="col">
+		<div class="col"><button class="btn btn-danger" @click="ExportToExcel()">Exportar</button></div>
+	</div>
+	<div class="row">
+		<div class="col" id="divRespuesta">
 			<tablePadresAptos :respuestas="respuestas"></tablePadresAptos>
 		</div>
 	</div>
@@ -46,7 +49,8 @@ export default{
 	data() {
 		return {
 			respuestas:[], grados:[], filtro:{queReporte:1, idGrado:-1, año:moment().format('YYYY')}, años:[], reportes:[
-				{id:1, clase: 'Padres aptos para votar'}
+				{id:1, clase: 'Padres aptos para votar'},
+				{id:2, clase: 'Padres no aptos para votar'},
 			]
 		}
 	},
@@ -72,7 +76,16 @@ export default{
 			datos.append('queReporte', this.filtro.queReporte)
 			this.axios.post(this.servidor+'Reportes.php', datos)
 			.then(resp => this.respuestas = resp.data)
-		}
+		},
+		ExportToExcel(fn, dl) {
+			const type = 'xlsx'
+			const nombre = this.reportes.find(x => x.id===this.filtro.queReporte).clase.replaceAll(' ', '_') + `-${moment().format('DD-MM-YYYY-hh-mm')}`
+			var elt = document.querySelector('#divRespuesta table');
+			var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+			return dl ?
+				XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+				XLSX.writeFile(wb, fn || (`Datos-${nombre}.` + (type || 'xlsx')));
+    }
 	}
 }
 </script>
