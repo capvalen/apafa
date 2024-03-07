@@ -22,7 +22,9 @@ function crear($db){
 
 function listar($db){
 	$filas = [];
-	$sql = $db->prepare("SELECT * FROM `reunion` where activo = 1 order by id desc;");
+	$sql = $db->prepare("SELECT r.*, t.descripcion
+	FROM `reunion` r inner join tiporeunion t on t.id = r.tiporeunion
+	where activo = 1 order by id desc;");
 	if($sql->execute()){
 		while($rows = $sql->fetch(PDO::FETCH_ASSOC))
 			$filas[] = $rows;
