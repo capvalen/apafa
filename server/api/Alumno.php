@@ -10,7 +10,8 @@ switch ($_POST['pedir']) {
 }
 
 function buscarDNI($db){
-	$sql = $db->prepare("SELECT * FROM `alumno` WHERE dni = ? and activo = 1 and dni<>'' limit 1;");
+	$sql = $db->prepare("SELECT a.*, m.idGrado FROM `alumno` a
+	left join matricula m on a.id = m.idAlumno WHERE a.dni = ? and a.activo = 1 limit 1;");
 	if($sql->execute([ $_POST['dni'] ])){
 		$conteo =  $sql->rowCount();
 		$alumno = [];
