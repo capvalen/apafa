@@ -13,12 +13,12 @@ function buscarDNI($db){
 	$sql = $db->prepare("SELECT * FROM `alumno` WHERE dni = ? and activo = 1 and dni<>'' limit 1;");
 	if($sql->execute([ $_POST['dni'] ])){
 		$conteo =  $sql->rowCount();
-		$apoderado = [];
+		$alumno = [];
 		if($conteo>0){
 			$rows = $sql->fetch(PDO::FETCH_ASSOC);
-			$apoderado = $rows;
+			$alumno = $rows;
 		}
-		echo json_encode( array('conteo' => $conteo, 'alumno' => $apoderado, 'mensaje' => 'ok'));
+		echo json_encode( array('conteo' => $conteo, 'alumno' => $alumno, 'mensaje' => 'ok'));
 	}
 }
 
