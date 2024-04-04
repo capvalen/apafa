@@ -15,7 +15,7 @@
 			<p class="fs-1 text-center mb-0">Registro y actualización de datos</p>
 			<p class="fs-6 text-center">Por: APAFA 2023</p>
 			<div class="container">
-				<p>Rellene cuidadosamente los siguientes datos solicitados, en caso requiera una guía puede ver este <a href="../tutorial.mp4" target="_blank" class="text-decoration-none"><i class="bi bi-camera-video"></i> Video tutorial desde acá</a></p>
+				<p>Rellene cuidadosamente los siguientes datos solicitados, en caso requiera una guía puede ver este <a href="../tutorial-registro.mp4?v=1" target="_blank" class="text-decoration-none"><i class="bi bi-camera-video"></i> Video tutorial desde acá</a></p>
 			</div>
 		</div>
 
@@ -25,24 +25,128 @@
 					<div class="col col-md-6 p-4 border-end">
 						<div class="text-center" id="iStudent"><i class="bi bi-backpack2"></i></div>
 						<p class="fs-4 text-center">Registro del alumno</p>
-						<label for="">DNI del alumno:</label>
-						<div class="input-group mb-3">
-							<input type="text" class="form-control" autocomplete="off" v-model="alumno.dni" @keyup.enter="buscarDNI('Alumno')" @blur="buscarDNI('Alumno')">
-							<button class="btn btn-outline-primary" type="button" @click="buscarDNI('Alumno')"><i class="bi bi-search"></i></button>
+
+						<div class="mt-3">
+							<p class="fw-bold"><i class="bi bi-person-standing"></i> Datos del primer hijo:</p>
+							<label for="">DNI del alumno:</label>
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" autocomplete="off" v-model="alumno.dni" @keyup.enter="buscarDNI('Alumno')" @blur="buscarDNI('Alumno')">
+								<button class="btn btn-outline-primary" type="button" @click="buscarDNI('Alumno')"><i class="bi bi-search"></i></button>
+							</div>
+							<label class="mt-3" for="">Apellidos del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno.apellidos">
+							<label class="mt-3" for="">Nombres del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno.nombres">
+							<label class="mt-3" for="">Grado:</label>
+							<select class="form-select" id="sltGrados" v-model="alumno.idGrado">
+								<option value="-1">Seleccione un grado</option>
+								<option v-for="grado in grados" :value="grado.id">{{grado.grado}} - {{grado.nivel}}</option>
+							</select>
+						</div>						
+						<div class="mt-3">
+							<p class="fw-bold"><i class="bi bi-person-standing"></i> Datos del segundo hijo:</p>
+							<label for="">DNI del alumno:</label>
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" autocomplete="off" v-model="alumno2.dni" @keyup.enter="buscarDNI('Alumno2')" @blur="buscarDNI('Alumno2')">
+								<button class="btn btn-outline-primary" type="button" @click="buscarDNI('Alumno2')"><i class="bi bi-search"></i></button>
+							</div>
+							<label class="mt-3" for="">Apellidos del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno2.apellidos">
+							<label class="mt-3" for="">Nombres del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno2.nombres">
+							<label class="mt-3" for="">Grado:</label>
+							<select class="form-select" id="sltGrados" v-model="alumno2.idGrado">
+								<option value="-1">Seleccione un grado</option>
+								<option v-for="grado in grados" :value="grado.id">{{grado.grado}} - {{grado.nivel}}</option>
+							</select>
 						</div>
-						<label class="mt-3" for="">Apellidos del alumno:</label>
-						<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno.apellidos">
-
-						<label class="mt-3" for="">Nombres del alumno:</label>
-						<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno.nombres">
-
-						<label class="mt-3" for="">Grado:</label>
-						<select class="form-select" id="sltGrados" v-model="alumno.idGrado">
-							<option value="-1">Seleccione un grado</option>
-							<option v-for="grado in grados" :value="grado.id">{{grado.grado}} - {{grado.nivel}}</option>
-						</select>
-						
+						<div class="mt-3">
+							<p class="fw-bold"><i class="bi bi-person-standing"></i> Datos del tercer hijo:</p>
+							<label for="">DNI del alumno:</label>
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" autocomplete="off" v-model="alumno3.dni" @keyup.enter="buscarDNI('Alumno3')" @blur="buscarDNI('Alumno3')">
+								<button class="btn btn-outline-primary" type="button" @click="buscarDNI('Alumno3')"><i class="bi bi-search"></i></button>
+							</div>
+							<label class="mt-3" for="">Apellidos del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno3.apellidos">
+							<label class="mt-3" for="">Nombres del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno3.nombres">
+							<label class="mt-3" for="">Grado:</label>
+							<select class="form-select" id="sltGrados" v-model="alumno3.idGrado">
+								<option value="-1">Seleccione un grado</option>
+								<option v-for="grado in grados" :value="grado.id">{{grado.grado}} - {{grado.nivel}}</option>
+							</select>
+						</div>						
+						<div class="mt-3">
+							<p class="fw-bold"><i class="bi bi-person-standing"></i> Datos del cuarto hijo:</p>
+							<label for="">DNI del alumno:</label>
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" autocomplete="off" v-model="alumno4.dni" @keyup.enter="buscarDNI('Alumno4')" @blur="buscarDNI('Alumno4')">
+								<button class="btn btn-outline-primary" type="button" @click="buscarDNI('Alumno4')"><i class="bi bi-search"></i></button>
+							</div>
+							<label class="mt-3" for="">Apellidos del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno4.apellidos">
+							<label class="mt-3" for="">Nombres del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno4.nombres">
+							<label class="mt-3" for="">Grado:</label>
+							<select class="form-select" id="sltGrados" v-model="alumno4.idGrado">
+								<option value="-1">Seleccione un grado</option>
+								<option v-for="grado in grados" :value="grado.id">{{grado.grado}} - {{grado.nivel}}</option>
+							</select>
+						</div>						
+						<div class="mt-3">
+							<p class="fw-bold"><i class="bi bi-person-standing"></i> Datos del quinto hijo:</p>
+							<label for="">DNI del alumno:</label>
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" autocomplete="off" v-model="alumno5.dni" @keyup.enter="buscarDNI('Alumno5')" @blur="buscarDNI('Alumno5')">
+								<button class="btn btn-outline-primary" type="button" @click="buscarDNI('Alumno5')"><i class="bi bi-search"></i></button>
+							</div>
+							<label class="mt-3" for="">Apellidos del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno5.apellidos">
+							<label class="mt-3" for="">Nombres del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno5.nombres">
+							<label class="mt-3" for="">Grado:</label>
+							<select class="form-select" id="sltGrados" v-model="alumno5.idGrado">
+								<option value="-1">Seleccione un grado</option>
+								<option v-for="grado in grados" :value="grado.id">{{grado.grado}} - {{grado.nivel}}</option>
+							</select>
+						</div>						
+						<div class="mt-3">
+							<p class="fw-bold"><i class="bi bi-person-standing"></i> Datos del sexto hijo:</p>
+							<label for="">DNI del alumno:</label>
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" autocomplete="off" v-model="alumno6.dni" @keyup.enter="buscarDNI('Alumno6')" @blur="buscarDNI('Alumno6')">
+								<button class="btn btn-outline-primary" type="button" @click="buscarDNI('Alumno6')"><i class="bi bi-search"></i></button>
+							</div>
+							<label class="mt-3" for="">Apellidos del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno6.apellidos">
+							<label class="mt-3" for="">Nombres del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno6.nombres">
+							<label class="mt-3" for="">Grado:</label>
+							<select class="form-select" id="sltGrados" v-model="alumno6.idGrado">
+								<option value="-1">Seleccione un grado</option>
+								<option v-for="grado in grados" :value="grado.id">{{grado.grado}} - {{grado.nivel}}</option>
+							</select>
+						</div>
+						<div class="mt-3">
+							<p class="fw-bold"><i class="bi bi-person-standing"></i> Datos del séptimo hijo:</p>
+							<label for="">DNI del alumno:</label>
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" autocomplete="off" v-model="alumno7.dni" @keyup.enter="buscarDNI('Alumno7')" @blur="buscarDNI('Alumno7')">
+								<button class="btn btn-outline-primary" type="button" @click="buscarDNI('Alumno7')"><i class="bi bi-search"></i></button>
+							</div>
+							<label class="mt-3" for="">Apellidos del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno7.apellidos">
+							<label class="mt-3" for="">Nombres del alumno:</label>
+							<input type="text" placeholder="" class="form-control" autocomplete="off" v-model="alumno7.nombres">
+							<label class="mt-3" for="">Grado:</label>
+							<select class="form-select" id="sltGrados" v-model="alumno7.idGrado">
+								<option value="-1">Seleccione un grado</option>
+								<option v-for="grado in grados" :value="grado.id">{{grado.grado}} - {{grado.nivel}}</option>
+							</select>
+						</div>
 					</div>
+
 					<div class="col col-md-6 p-4">
 						<div class="text-center" id="iParent"><i class="bi bi-people"></i></div>
 						<p class="fs-4 text-center">Registro de apoderados</p>
@@ -152,6 +256,12 @@
 				];
 				const grados = ref([]);
 				const alumno = ref({ dni:'', apellidos:'', nombres:'', idGrado:-1 , id:-1});
+				const alumno2 = ref({ dni:'', apellidos:'', nombres:'', idGrado:-1 , id:-1});
+				const alumno3 = ref({ dni:'', apellidos:'', nombres:'', idGrado:-1 , id:-1});
+				const alumno4 = ref({ dni:'', apellidos:'', nombres:'', idGrado:-1 , id:-1});
+				const alumno5 = ref({ dni:'', apellidos:'', nombres:'', idGrado:-1 , id:-1});
+				const alumno6 = ref({ dni:'', apellidos:'', nombres:'', idGrado:-1 , id:-1});
+				const alumno7 = ref({ dni:'', apellidos:'', nombres:'', idGrado:-1 , id:-1});
 				const padre = ref({ dni:'', apellidos:'', nombres:'', id:-1});
 				const madre = ref({ dni:'', apellidos:'', nombres:'', id:-1});
 				const apoderado = ref({ dni:'', apellidos:'', nombres:'', idRelacion:-1, id:-1});
@@ -172,19 +282,25 @@
 					let datos = new FormData()
 					let serv = null
 					datos.append('pedir', 'buscarDNI');
-
+					
 					switch(tipo){
 						case 'Alumno': datos.append('dni', alumno.value.dni ); break;
+						case 'Alumno2': datos.append('dni', alumno2.value.dni ); break;
+						case 'Alumno3': datos.append('dni', alumno3.value.dni ); break;
+						case 'Alumno4': datos.append('dni', alumno4.value.dni ); break;
+						case 'Alumno5': datos.append('dni', alumno5.value.dni ); break;
+						case 'Alumno6': datos.append('dni', alumno6.value.dni ); break;
+						case 'Alumno7': datos.append('dni', alumno7.value.dni ); break;
 						case 'Padre': datos.append('dni', padre.value.dni ); break;
 						case 'Madre': datos.append('dni', madre.value.dni ); break;
 						case 'Apoderado': datos.append('dni', apoderado.value.dni ); break;
 					}
 					
 					switch(tipo){
-						case 'Alumno':
-							serv = await fetch(servidor+'Alumno.php', {method:'POST', body:datos}); break;
 						case 'Padre': case 'Madre': case 'Apoderado':
 							serv = await fetch(servidor+'Apoderado.php', {method:'POST', body:datos}); break;
+						default:
+							serv = await fetch(servidor+'Alumno.php', {method:'POST', body:datos}); break;
 					}
 
 					const respuesta = await serv.json()
@@ -198,11 +314,101 @@
 								alumno.value.nombres = respuesta.alumno.nombres
 								alumno.value.idGrado = respuesta.alumno.idGrado ?? -1
 							}else{
-								alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
+								//alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
 								alumno.value.id = -1
 								alumno.value.apellidos = ''
 								alumno.value.nombres = ''
 								alumno.value.idGrado = -1
+							}
+							break;
+						case 'Alumno2':
+							if(respuesta.conteo>0){
+								alertify.success('<i class="bi bi-check-lg"></i> DNI encontrado',10)
+								alumno2.value.id = respuesta.alumno.id
+								alumno2.value.apellidos = respuesta.alumno.apellidos
+								alumno2.value.nombres = respuesta.alumno.nombres
+								alumno2.value.idGrado = respuesta.alumno.idGrado ?? -1
+							}else{
+								//alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
+								alumno2.value.id = -1
+								alumno2.value.apellidos = ''
+								alumno2.value.nombres = ''
+								alumno2.value.idGrado = -1
+							}
+							break;
+						case 'Alumno3':
+							if(respuesta.conteo>0){
+								alertify.success('<i class="bi bi-check-lg"></i> DNI encontrado',10)
+								alumno3.value.id = respuesta.alumno.id
+								alumno3.value.apellidos = respuesta.alumno.apellidos
+								alumno3.value.nombres = respuesta.alumno.nombres
+								alumno3.value.idGrado = respuesta.alumno.idGrado ?? -1
+							}else{
+								//alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
+								alumno3.value.id = -1
+								alumno3.value.apellidos = ''
+								alumno3.value.nombres = ''
+								alumno3.value.idGrado = -1
+							}
+							break;
+						case 'Alumno4':
+							if(respuesta.conteo>0){
+								alertify.success('<i class="bi bi-check-lg"></i> DNI encontrado',10)
+								alumno4.value.id = respuesta.alumno.id
+								alumno4.value.apellidos = respuesta.alumno.apellidos
+								alumno4.value.nombres = respuesta.alumno.nombres
+								alumno4.value.idGrado = respuesta.alumno.idGrado ?? -1
+							}else{
+								//alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
+								alumno4.value.id = -1
+								alumno4.value.apellidos = ''
+								alumno4.value.nombres = ''
+								alumno4.value.idGrado = -1
+							}
+							break;
+						case 'Alumno5':
+							if(respuesta.conteo>0){
+								alertify.success('<i class="bi bi-check-lg"></i> DNI encontrado',10)
+								alumno5.value.id = respuesta.alumno.id
+								alumno5.value.apellidos = respuesta.alumno.apellidos
+								alumno5.value.nombres = respuesta.alumno.nombres
+								alumno5.value.idGrado = respuesta.alumno.idGrado ?? -1
+							}else{
+								//alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
+								alumno5.value.id = -1
+								alumno5.value.apellidos = ''
+								alumno5.value.nombres = ''
+								alumno5.value.idGrado = -1
+							}
+							break;
+						case 'Alumno6':
+							if(respuesta.conteo>0){
+								alertify.success('<i class="bi bi-check-lg"></i> DNI encontrado',10)
+								alumno6.value.id = respuesta.alumno.id
+								alumno6.value.apellidos = respuesta.alumno.apellidos
+								alumno6.value.nombres = respuesta.alumno.nombres
+								alumno6.value.idGrado = respuesta.alumno.idGrado ?? -1
+							}else{
+								//alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
+								alumno6.value.id = -1
+								alumno6.value.apellidos = ''
+								alumno6.value.nombres = ''
+								alumno6.value.idGrado = -1
+							}
+							break;
+						case 'Alumno7':
+							if(respuesta.conteo>0){
+								alertify.success('<i class="bi bi-check-lg"></i> DNI encontrado',10)
+								alumno7.value.id = respuesta.alumno.id
+								alumno7.value.apellidos = respuesta.alumno.apellidos
+								alumno7.value.nombres = respuesta.alumno.nombres
+								alumno7.value.idGrado = respuesta.alumno.idGrado ?? -1
+							}else{
+								//alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
+								alumno7.value.id = -1
+								alumno7.value.apellidos = ''
+								alumno7.value.nombres = ''
+								alumno7.value.idGrado = -1
 							}
 							break;
 						case 'Padre':
@@ -212,7 +418,7 @@
 								padre.value.apellidos = respuesta.apoderado.apellidos
 								padre.value.nombres = respuesta.apoderado.nombres
 							}else{
-								alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
+								//alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
 								padre.value.id = -1
 								padre.value.apellidos = ''
 								padre.value.nombres = ''
@@ -227,7 +433,7 @@
 								madre.value.nombres = respuesta.apoderado.nombres
 								madre.value.nombres.idRelacion = 2
 							}else{
-								alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
+								//alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
 								madre.value.id = -1
 								madre.value.apellidos = ''
 								madre.value.nombres = ''
@@ -241,7 +447,7 @@
 								apoderado.value.nombres = respuesta.apoderado.nombres
 								apoderado.value.idRelacion = respuesta.apoderado.idRelacion ?? -1
 							}else{
-								alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
+								//alertify.error('<i class="bi bi-exclamation-circle"></i> No se encontró el DNI en los registros',10)
 								apoderado.value.id = -1
 								apoderado.value.apellidos = ''
 								apoderado.value.nombres = ''
@@ -257,6 +463,30 @@
 						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe rellenar DNI y nombres del alumno')
 					else if( alumno.value.dni!='' && (alumno.value.idGrado == '' || alumno.value.idGrado==-1) )
 						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe seleccionar un grado del alumno')
+					if(alumno2.value.id == -1 && alumno2.value.dni != '' && alumno2.value.apellidos == '')
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe rellenar DNI y nombres del alumno')
+					else if( alumno2.value.dni!='' && (alumno2.value.idGrado == '' || alumno2.value.idGrado==-1) )
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe seleccionar un grado del alumno')
+					if(alumno3.value.id == -1 && alumno3.value.dni != '' && alumno3.value.apellidos == '')
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe rellenar DNI y nombres del alumno')
+					else if( alumno3.value.dni!='' && (alumno3.value.idGrado == '' || alumno3.value.idGrado==-1) )
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe seleccionar un grado del alumno')
+					if(alumno4.value.id == -1 && alumno4.value.dni != '' && alumno4.value.apellidos == '')
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe rellenar DNI y nombres del alumno')
+					else if( alumno4.value.dni!='' && (alumno4.value.idGrado == '' || alumno4.value.idGrado==-1) )
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe seleccionar un grado del alumno')
+					if(alumno5.value.id == -1 && alumno5.value.dni != '' && alumno5.value.apellidos == '')
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe rellenar DNI y nombres del alumno')
+					else if( alumno5.value.dni!='' && (alumno5.value.idGrado == '' || alumno5.value.idGrado==-1) )
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe seleccionar un grado del alumno')
+					if(alumno6.value.id == -1 && alumno6.value.dni != '' && alumno6.value.apellidos == '')
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe rellenar DNI y nombres del alumno')
+					else if( alumno6.value.dni!='' && (alumno6.value.idGrado == '' || alumno6.value.idGrado==-1) )
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe seleccionar un grado del alumno')
+					if(alumno7.value.id == -1 && alumno7.value.dni != '' && alumno7.value.apellidos == '')
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe rellenar DNI y nombres del alumno')
+					else if( alumno7.value.dni!='' && (alumno7.value.idGrado == '' || alumno7.value.idGrado==-1) )
+						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe seleccionar un grado del alumno')
 					else if( padre.value.dni!='' && padre.value.apellidos == ''  )
 						alertify.error('<i class="bi bi-exclamation-triangle"></i> Debe rellenar DNI y nombres del padre')
 					else if( madre.value.dni!='' && madre.value.apellidos == ''  )
@@ -270,6 +500,12 @@
 						let datos = new FormData()
 						datos.append('pedir', 'registro');
 						datos.append('alumno', JSON.stringify(alumno.value) );
+						datos.append('alumno2', JSON.stringify(alumno2.value) );
+						datos.append('alumno3', JSON.stringify(alumno3.value) );
+						datos.append('alumno4', JSON.stringify(alumno4.value) );
+						datos.append('alumno5', JSON.stringify(alumno5.value) );
+						datos.append('alumno6', JSON.stringify(alumno6.value) );
+						datos.append('alumno7', JSON.stringify(alumno7.value) );
 						datos.append('padre', JSON.stringify(padre.value) );
 						datos.append('madre', JSON.stringify(madre.value) );
 						datos.append('apoderado', JSON.stringify(apoderado.value) );
@@ -279,7 +515,7 @@
 						let tempo = await serv.json()
 						guardados.value = [];
 
-						if(parseInt(tempo.idAlumno)>0) guardados.value.push(`Alumno: ${alumno.value.apellidos} ${alumno.value.nombres}`)
+						guardados.value.push(`Alumnos matriculados: ${tempo.matriculados} `)
 						if(parseInt(tempo.idPadre)>0) guardados.value.push(`Padre: ${padre.value.apellidos} ${padre.value.nombres}`)
 						if(parseInt(tempo.idMadre)>0) guardados.value.push(`Madre: ${madre.value.apellidos} ${madre.value.nombres}`)
 						if(parseInt(tempo.idApoderado)>0) guardados.value.push(`Apoderado: ${apoderado.value.apellidos} ${apoderado.value.nombres}`)
@@ -296,6 +532,36 @@
 						alumno.value.apellidos = ''
 						alumno.value.nombres = ''
 						alumno.value.idGrado = -1
+						alumno2.value.id = -1
+						alumno2.value.dni = ''
+						alumno2.value.apellidos = ''
+						alumno2.value.nombres = ''
+						alumno2.value.idGrado = -1
+						alumno3.value.id = -1
+						alumno3.value.dni = ''
+						alumno3.value.apellidos = ''
+						alumno3.value.nombres = ''
+						alumno3.value.idGrado = -1
+						alumno4.value.id = -1
+						alumno4.value.dni = ''
+						alumno4.value.apellidos = ''
+						alumno4.value.nombres = ''
+						alumno4.value.idGrado = -1
+						alumno5.value.id = -1
+						alumno5.value.dni = ''
+						alumno5.value.apellidos = ''
+						alumno5.value.nombres = ''
+						alumno5.value.idGrado = -1
+						alumno6.value.id = -1
+						alumno6.value.dni = ''
+						alumno6.value.apellidos = ''
+						alumno6.value.nombres = ''
+						alumno6.value.idGrado = -1
+						alumno7.value.id = -1
+						alumno7.value.dni = ''
+						alumno7.value.apellidos = ''
+						alumno7.value.nombres = ''
+						alumno7.value.idGrado = -1
 
 						padre.value.id = -1
 						padre.value.dni = ''
@@ -317,7 +583,8 @@
 				onMounted( ()=>{
 				})
 				return {
-					alumno, padre, madre, apoderado, relaciones, grados, guardados,
+					alumno,alumno2,alumno3,alumno4,alumno5,alumno6,alumno7,
+					padre, madre, apoderado, relaciones, grados, guardados,
 					buscarDNI, cargarGrados, registro
 				}
 			},

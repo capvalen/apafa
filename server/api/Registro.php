@@ -5,15 +5,85 @@ include('conexion.php');
 //var_dump($_POST); die();
 
 switch ($_POST['pedir']) {
-	case 'registro': registro($datab); break;
+	case 'registro': prematricula($datab); break;
 	default: break;
 }
 
-function registro($db){
+function prematricula($db){
+	$idPadre=-1;	$idMadre=-1;	$idApoderado=-1; $matriculados=0;
+	$pasante = json_decode($_POST['alumno'], true);
+	$pasante2 = json_decode($_POST['alumno2'], true);
+	$pasante3 = json_decode($_POST['alumno3'], true);
+	$pasante4 = json_decode($_POST['alumno4'], true);
+	$pasante5 = json_decode($_POST['alumno5'], true);
+	$pasante6 = json_decode($_POST['alumno6'], true);
+	$pasante7 = json_decode($_POST['alumno7'], true);
+
+
+	
+	// ----- Registro del padre
+	$padre = json_decode($_POST['padre'], true);
+	if($padre['id']<>-1){ //padre ya registrado, actualizamos datos
+		$sqlPadre = $db->prepare("UPDATE `padre` SET `apellidos` = ?, `nombres` = ? WHERE `id` = ?; ");
+		$sqlPadre -> execute([ $padre['apellidos'], $padre['nombres'], $padre['id'] ]);
+		$idPadre = $padre['id'];
+	}
+	else if($padre['dni']<>'' && $padre['apellidos']<>''){
+		//Comenzamos a registrar un nuevo padre
+		$sqlPadre = $db->prepare("INSERT INTO `padre`(`nombres`, `apellidos`, `dni`) VALUES (?, ?, ?);");
+		$sqlPadre -> execute([ $padre['nombres'], $padre['apellidos'], $padre['dni'] ]);
+		$idPadre = $db->lastInsertId();
+	}
+
+	// ----- Registro del madre
+	$madre = json_decode($_POST['madre'], true);
+	if($madre['id']<>-1){ //madre ya registrado, actualizamos datos
+		$sqlMadre = $db->prepare("UPDATE `padre` SET `apellidos` = ?, `nombres` = ? WHERE `id` = ?; ");
+		$sqlMadre -> execute([ $madre['apellidos'], $madre['nombres'], $madre['id'] ]);
+		$idMadre = $madre['id'];
+	}
+	else if($madre['dni']<>'' && $madre['apellidos']<>''){
+		//Comenzamos a registrar un nuevo madre
+		$sqlMadre = $db->prepare("INSERT INTO `padre`(`nombres`, `apellidos`, `dni`) VALUES (?, ?, ?);");
+		$sqlMadre -> execute([ $madre['nombres'], $madre['apellidos'], $madre['dni'] ]);
+		$idMadre = $db->lastInsertId();
+	}
+
+	
+	// ----- Registro del apoderado
+	$apoderado = json_decode($_POST['apoderado'], true);
+	$idRelacion = $apoderado['idRelacion'];
+	if($apoderado['id']<>-1){ //apoderado ya registrado, actualizamos datos
+		$sqlApoderado = $db->prepare("UPDATE `padre` SET `apellidos` = ?, `nombres` = ? WHERE `id` = ?; ");
+		$sqlApoderado -> execute([ $apoderado['apellidos'], $apoderado['nombres'], $apoderado['id'] ]);
+		$idApoderado = $apoderado['id'];
+	}
+	else if($apoderado['dni']<>'' && $apoderado['apellidos']<>''){
+		//Comenzamos a registrar un nuevo apoderado
+		$sqlApoderado = $db->prepare("INSERT INTO `padre`(`nombres`, `apellidos`, `dni`, `idRelacion`) VALUES (?, ?, ?, ?);");
+		$sqlApoderado -> execute([ $apoderado['nombres'], $apoderado['apellidos'], $apoderado['dni'], $apoderado['idRelacion'] ]);
+		$idApoderado = $db->lastInsertId();
+	}
+
+	if($pasante['dni']<>'' && $pasante['apellidos']<>'' ){ registro($db, $pasante, $idPadre, $idMadre, $idApoderado, $idRelacion ); $matriculados++;}
+	if($pasante2['dni']<>'' && $pasante2['apellidos']<>'' ){ registro($db, $pasante2, $idPadre, $idMadre, $idApoderado, $idRelacion ); $matriculados++;}
+	if($pasante3['dni']<>'' && $pasante3['apellidos']<>'' ){ registro($db, $pasante3, $idPadre, $idMadre, $idApoderado, $idRelacion ); $matriculados++;}
+	if($pasante4['dni']<>'' && $pasante4['apellidos']<>'' ){ registro($db, $pasante4, $idPadre, $idMadre, $idApoderado, $idRelacion ); $matriculados++;}
+	if($pasante5['dni']<>'' && $pasante5['apellidos']<>'' ){ registro($db, $pasante5, $idPadre, $idMadre, $idApoderado, $idRelacion ); $matriculados++;}
+	if($pasante6['dni']<>'' && $pasante6['apellidos']<>'' ){ registro($db, $pasante6, $idPadre, $idMadre, $idApoderado, $idRelacion ); $matriculados++;}
+	if($pasante7['dni']<>'' && $pasante7['apellidos']<>'' ){ registro($db, $pasante7, $idPadre, $idMadre, $idApoderado, $idRelacion ); $matriculados++;}
+
+	echo json_encode( array(
+		'idPadre' => $idPadre, 'idMadre' => $idMadre, 'idApoderado' => $idApoderado,
+		'matriculados' => $matriculados
+	));
+}
+
+function registro($db, $alumno, $idPadre, $idMadre, $idApoderado, $idRelacion){
 	
 	// ----- Registro del alumno
-	$idAlumno=-1;$idPadre=-1;	$idMadre=-1;	$idApoderado=-1;
-	$alumno = json_decode($_POST['alumno'], true);
+	$idAlumno=-1;
+	
 	if($alumno['id']<>-1){ //alumno ya registrado, actualizamos datos
 		$sqlAlumno = $db->prepare("UPDATE `alumno` SET `apellidos` = ?, `nombres` = ? WHERE `alumno`.`id` = ?; ");
 		$sqlAlumno -> execute([ $alumno['apellidos'], $alumno['nombres'], $alumno['id'] ]);
@@ -35,19 +105,6 @@ function registro($db){
 		$sqlInscripcion->execute([ $idAlumno, $alumno['idGrado'], $año ]);
 	}
 
-	// ----- Registro del padre
-	$padre = json_decode($_POST['padre'], true);
-	if($padre['id']<>-1){ //padre ya registrado, actualizamos datos
-		$sqlPadre = $db->prepare("UPDATE `padre` SET `apellidos` = ?, `nombres` = ? WHERE `id` = ?; ");
-		$sqlPadre -> execute([ $padre['apellidos'], $padre['nombres'], $padre['id'] ]);
-		$idPadre = $padre['id'];
-	}
-	else if($padre['dni']<>'' && $padre['apellidos']<>''){
-		//Comenzamos a registrar un nuevo padre
-		$sqlPadre = $db->prepare("INSERT INTO `padre`(`nombres`, `apellidos`, `dni`) VALUES (?, ?, ?);");
-		$sqlPadre -> execute([ $padre['nombres'], $padre['apellidos'], $padre['dni'] ]);
-		$idPadre = $db->lastInsertId();
-	}
 
 	if($idPadre<>-1){
 		$sqlRelaciones = $db->prepare("SELECT * FROM `relacion` where idPadre = ? and idAlumno = ? and idRelacion = 1 and activo = 1");
@@ -57,20 +114,6 @@ function registro($db){
 			$sqlParentezco = $db->prepare("INSERT INTO `relacion`(`idPadre`, `idAlumno`, `idRelacion`) VALUES (?, ?, 1);");
 			$sqlParentezco->execute([ $idPadre, $idAlumno ]);
 		}
-	}
-
-	// ----- Registro del madre
-	$madre = json_decode($_POST['madre'], true);
-	if($madre['id']<>-1){ //madre ya registrado, actualizamos datos
-		$sqlMadre = $db->prepare("UPDATE `padre` SET `apellidos` = ?, `nombres` = ? WHERE `id` = ?; ");
-		$sqlMadre -> execute([ $madre['apellidos'], $madre['nombres'], $madre['id'] ]);
-		$idMadre = $madre['id'];
-	}
-	else if($madre['dni']<>'' && $madre['apellidos']<>''){
-		//Comenzamos a registrar un nuevo madre
-		$sqlMadre = $db->prepare("INSERT INTO `padre`(`nombres`, `apellidos`, `dni`) VALUES (?, ?, ?);");
-		$sqlMadre -> execute([ $madre['nombres'], $madre['apellidos'], $madre['dni'] ]);
-		$idMadre = $db->lastInsertId();
 	}
 
 	if($idMadre<>-1){
@@ -83,34 +126,18 @@ function registro($db){
 		}
 	}
 
-	// ----- Registro del apoderado
-	$apoderado = json_decode($_POST['apoderado'], true);
-	if($apoderado['id']<>-1){ //apoderado ya registrado, actualizamos datos
-		$sqlApoderado = $db->prepare("UPDATE `padre` SET `apellidos` = ?, `nombres` = ? WHERE `id` = ?; ");
-		$sqlApoderado -> execute([ $apoderado['apellidos'], $apoderado['nombres'], $apoderado['id'] ]);
-		$idApoderado = $apoderado['id'];
-	}
-	else if($apoderado['dni']<>'' && $apoderado['apellidos']<>''){
-		//Comenzamos a registrar un nuevo apoderado
-		$sqlApoderado = $db->prepare("INSERT INTO `padre`(`nombres`, `apellidos`, `dni`, `idRelacion`) VALUES (?, ?, ?, ?);");
-		$sqlApoderado -> execute([ $apoderado['nombres'], $apoderado['apellidos'], $apoderado['dni'], $apoderado['idRelacion'] ]);
-		$idApoderado = $db->lastInsertId();
-	}
-
 	if($idApoderado<>-1){
 		$sqlRelacionesApoderado = $db->prepare("SELECT * FROM `relacion` where idPadre = ? and idAlumno = ? and idRelacion = ? and activo = 1");
-		$sqlRelacionesApoderado -> execute([ $idApoderado, $idAlumno, $apoderado['idRelacion'] ]);
+		$sqlRelacionesApoderado -> execute([ $idApoderado, $idAlumno, $idRelacion ]);
 		$cuentaRelacion = $sqlRelacionesApoderado->rowCount();
 		if($cuentaRelacion == 0 && $idAlumno<>-1){
 			$sqlParentezco = $db->prepare("INSERT INTO `relacion`(`idPadre`, `idAlumno`, `idRelacion`) VALUES (?, ?, ?);");
-			$sqlParentezco->execute([ $idApoderado, $idAlumno, $apoderado['idRelacion'] ]);
+			$sqlParentezco->execute([ $idApoderado, $idAlumno, $idRelacion ]);
 		}
 	}
 
 	
-	echo json_encode( array(
-		'idAlumno' => $idAlumno, 'idPadre' => $idPadre, 'idMadre' => $idMadre, 'idApoderado' => $idApoderado
-	));
+	
 }
 
 function crearApoderado($db){
