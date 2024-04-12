@@ -7,6 +7,7 @@ include('conexion.php');
 switch ($_POST['pedir']) {
 	case 'buscarDNI': buscarDNI($datab); break;
 	case 'crearApoderado': crearApoderado($datab); break;
+	case 'actualizarApoderado': actualizarApoderado($datab); break;
 	case 'listar30Apoderados': listar30Apoderados($datab); break;
 	case 'buscarApoderados': buscarApoderados($datab); break;
 	case 'eliminarApoderado': eliminarApoderado($datab); break;
@@ -69,6 +70,20 @@ function crearApoderado($db){
 	}else{
 		echo json_encode( array('idPadre' => $apoderado['id'], 'mensaje' => 'ok'));
 	}
+}
+
+function actualizarApoderado($db){
+	$apoderado = json_decode($_POST['apoderado'], true);
+	
+	$sql = $db->prepare("UPDATE padre set apellidos = ?, nombres = ?, celular=?, idRelacion = ? WHERE id =  ?;");
+	if($sql->execute([
+		$apoderado['apellidos'], $apoderado['nombres'], $apoderado['celular'], $apoderado['idRelacion'], $apoderado['id']
+	])){
+		echo json_encode( array('mensaje' => 'ok'));
+	}else{
+		echo 'error';
+	}
+
 }
 
 function listar30Apoderados($db){

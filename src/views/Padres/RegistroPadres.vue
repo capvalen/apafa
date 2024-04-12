@@ -6,7 +6,8 @@
 		<div class="col-5">
 			<p class="fw-bold">Registro de apoderado</p>
 			<label for="">DNI</label>
-			<input type="text" class="form-control" autocomplete="off" v-model="apoderado.dni" @blur="buscarDNI()">
+			<input v-if="!editar" type="text" class="form-control" autocomplete="off" v-model="apoderado.dni" @blur="buscarDNI()">
+			<input v-else type="text" class="form-control" autocomplete="off" v-model="apoderado.dni" disabled>
 			<label for="">Apellidos</label>
 			<input type="text" class="form-control" autocomplete="off" v-model="apoderado.apellidos">
 			<label for="">Nombres</label>
@@ -25,7 +26,7 @@
 			<div class="d-flex justify-content-between mt-2">
 				<router-link to="/padres" class="btn btn-outline-secondary" @click="$emit('actualizarPadres')"><i class="bi bi-arrow-bar-left"></i> Volver</router-link>
 				<button v-if="!editar" class="btn btn-outline-success" @click="registrar()"><i class="bi bi-floppy"></i> Registrar datos</button>
-				<button v-if="editar" class="btn btn-outline-warning" @click="registrar()"><i class="bi bi-floppy"></i> Actualizar datos</button>
+				<button v-if="editar" class="btn btn-outline-warning" @click="actualizar()"><i class="bi bi-floppy"></i> Actualizar datos</button>
 			</div>
 		</div>
 		<div class="col-5">
@@ -150,7 +151,25 @@ export default{
 						this.limpiar()
 					}
 				})
-				
+			}
+		},
+		actualizar(){
+			if( this.apoderado.dni =='' )
+				alert('No se puede crear un apoderado con DNI vacío')
+			else if( this.apoderado.nombre =='' || this.apoderado.apellidos == '' )
+				alert('Falta rellenar datos de nommbres o apellidos')
+			else{
+				let datos = new FormData()
+				datos.append('pedir', 'crearApoderado')
+				datos.append('apoderado', JSON.stringify(this.apoderado))
+				datos.append('hijos', JSON.stringify(this.hijos))
+				this.axios.post(this.servidor + 'Apoderado.php', datos)
+				.then(res =>{
+					if (res.data.idPadre){
+						alertify.message('Guardado exitoso', 10);
+						this.limpiar()
+					}
+				})
 			}
 		},
 		quitarAlumno(index){

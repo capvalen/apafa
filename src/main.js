@@ -6,6 +6,7 @@ import axios from "axios";
 
 const app = createApp(App)
 app.config.globalProperties.servidor = 'http://localhost/apafa/api/';
+//app.config.globalProperties.servidor = 'http://apafa.infocatsoluciones.com/api/';
 
 //createApp(App).use(router).mount('#app')
 
