@@ -5,6 +5,7 @@ switch ($_POST['queReporte']) {
 	case '1': padresAptos($datab); break;
 	case '2': padreVsReuniones($datab); break;
 	case '3': padreVsFaenas($datab); break;
+	case '4': conteos($datab); break;
 	default: break;
 }
 
@@ -110,4 +111,38 @@ function padreVsFaenas($db){
 		}
 	}
 	echo json_encode( array('faenas' => $filas, 'dni'=>$_POST['dni'], 'existe'=>$existe, 'apoderado' => $padre) ); 
+}
+
+function conteos($db){
+	$sqlAlumnado= $db->prepare("SELECT count(*) as conteo FROM `matricula`
+	where año = year(now());");
+	$sqlAlumnado->execute();
+	$rowAlumnado = $sqlAlumnado->fetch(PDO::FETCH_ASSOC);
+	$alumnosConPadres = $rowAlumnado['conteo'];
+
+	$sqlPadres= $db->prepare("SELECT count(*) as conteo FROM `padre`
+	where activo = 1");
+	$sqlPadres->execute();
+	$rowPadres = $sqlPadres->fetch(PDO::FETCH_ASSOC);
+	$padresTotal = $rowPadres['conteo'];
+
+	$sqlReuniones= $db->prepare("SELECT count(*) as conteo FROM `reunion`
+	where activo = 1");
+	$sqlReuniones->execute();
+	$rowReuniones = $sqlReuniones->fetch(PDO::FETCH_ASSOC);
+	$reunionesTotal = $rowReuniones['conteo'];
+
+	$sqlFaenas= $db->prepare("SELECT count(*) as conteo FROM `faenas`
+	where activo = 1");
+	$sqlFaenas->execute();
+	$rowFaenas = $sqlFaenas->fetch(PDO::FETCH_ASSOC);
+	$faenasTotal = $rowFaenas['conteo'];
+
+	$sqlDeudas= $db->prepare("SELECT count(*) as conteo FROM `deudas`
+	where activo = 1");
+	$sqlDeudas->execute();
+	$rowDeudas = $sqlDeudas->fetch(PDO::FETCH_ASSOC);
+	$deudasTotal = $rowDeudas['conteo'];
+
+	echo json_encode( array('alumnosConPadres' => $alumnosConPadres, 'padresTotal'=> $padresTotal, 'reunionesTotal'=> $reunionesTotal, 'faenasTotal'=> $faenasTotal, 'deudasTotal'=> $deudasTotal ) ); 
 }
