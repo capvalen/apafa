@@ -36,6 +36,16 @@ const routes = [
     component: () => import('../views/Alumnos/HomeAlumnos.vue')
   },
 	{
+    path: '/Faenas',
+    name: 'HomeFaenas',
+    component: () => import('../views/Faenas/HomeFaenas.vue')
+  },
+  {
+    path: '/faena/:idFaena/detalle',
+    name: 'DetalleFaena',
+    component: () => import('../views/Faenas/DetalleFaena.vue')
+  },
+	{
     path: '/reuniones',
     name: 'HomeReuniones',
     component: () => import('../views/Reuniones/HomeReuniones.vue')
