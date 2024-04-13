@@ -2,9 +2,14 @@
 <template>
 	<h1>Deudas y pagos</h1>
 	<h3>Asunto: {{ deuda.motivo }} </h3>
-	<div class="row row-cols-2">
+	<div class="row">
 		<div class="col">
 			<h5>Monto a recaudar: S/ {{ parseFloat(deuda.monto).toFixed(2) }} </h5>
+		</div>
+	</div>
+	<div class="row row-cols-2">
+		<div class="col">
+			<h5>Monto recaudado: S/ {{ sumaMontos }} </h5>
 			<p><strong>Detalles adicionales:</strong> <br><span v-html="textoDivido(deuda.detalle)"></span></p>
 		</div>
 		<div class="col">

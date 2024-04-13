@@ -5,8 +5,8 @@ import VueAxios from 'vue-axios'
 import axios from "axios";
 
 const app = createApp(App)
-app.config.globalProperties.servidor = 'http://localhost/apafa/api/';
-//app.config.globalProperties.servidor = 'http://apafa.infocatsoluciones.com/api/';
+//app.config.globalProperties.servidor = 'http://localhost/apafa/api/';
+app.config.globalProperties.servidor = 'https://apafa.infocatsoluciones.com/api/';
 
 //createApp(App).use(router).mount('#app')
 

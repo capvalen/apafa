@@ -21,10 +21,9 @@
 				<tr v-for="(faena, index) in faenas">
 					<td>{{ index+1 }}</td>
 					<td>{{ fechaLatam(faena.fecha) }}</td>
-					<td>{{ faena.asunto }}</td>
+					<td class="text-capitalize">{{ faena.asunto }}</td>
 					<td>{{ horaLatam(faena.inicio) }}</td>
-					<td>{{ horaLatam(faena.salida) }}</td>
-					
+					<td>{{ horaLatam(faena.salida) }}</td>					
 					<td>
 						<button class="btn btn-outline-primary btn-sm" title="Ir a detalles" @click="irAfaena(faena.id)"><i class="bi bi-list-ul"></i></button>
 					</td>

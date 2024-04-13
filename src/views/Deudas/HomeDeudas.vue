@@ -1,12 +1,12 @@
 <template lang="">
 	<h1>Panel de deudas</h1>
 	<button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaDeuda"><i class="bi bi-plus-circle"></i> Crear nueva deuda</button>
-	<div class="row">
-		<div class="col-2">
+	<div class="row row-cols-5">
+		<div class="col">
 			<label for="">Buscar deuda</label>
 			<input type="text" class="form-control" placeholder="Búsqueda por asunto" v-model="filtro.texto" @keyup.enter="buscarDeudas()">
 		</div>
-		<div class="col-2">
+		<div class="col">
 			<label for="">Nivel y Grado</label>
 			<select class="form-select" id="sltGrados" v-model="filtro.idGrado">
 				<option value="-1">Todos</option>
@@ -17,21 +17,21 @@
 				</option>
 			</select>
 		</div>
-		<div class="col-2">
+		<div class="col">
 			<label for="">Año</label>
 			<select class="form-select" id="sltAños" v-model="filtro.año">
 				<option value="-1">Todos</option>
 				<option v-for="año in años" :value="año">{{ año }}</option>
 			</select>
 		</div>
-		<div class="col-2">
+		<div class="col">
 			<label for="">Mes</label>
 			<select class="form-select" id="sltMeses" v-model="filtro.mes">
 				<option value="-1">Todos</option>
 				<option v-for="mes in meses" :value="mes.id">{{ mes.mes }}</option>
 			</select>
 		</div>
-		<div class="col-2 d-grid align-content-end">
+		<div class="col d-grid align-content-end">
 			<button class="btn btn-outline-primary" @click="buscarDeudas()"><i class="bi bi-search"></i> Buscar</button>
 		</div>
 	</div>

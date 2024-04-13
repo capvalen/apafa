@@ -7,7 +7,7 @@
 				<option v-for="reporte in reportes" :value="reporte.id">{{ reporte.clase }}</option>
 			</select>
 		</div>
-		<div class="col-3">
+		<div class="col-3" v-if="filtro.queReporte==1">
 			<label for="">Nivel y Grado</label>
 			<select class="form-select" id="sltGrados" v-model="filtro.idGrado">
 				<option value="-1">Todos</option>
@@ -17,6 +17,10 @@
 					 {{grado.nivel}}
 				</option>
 			</select>
+		</div>
+		<div class="col-3" v-if="[2,3].includes(filtro.queReporte)">
+			<label for="">DNI apoderado</label>
+			<input type="text" class="form-control" v-model="filtro.dni" autocomplete="off">
 		</div>
 		<div class="col-2">
 			<label for="">Año</label>
@@ -31,11 +35,14 @@
 	</div>
 	<hr>
 	<div class="row">
-		<div class="col"><button class="btn btn-danger" @click="ExportToExcel()">Exportar</button></div>
+		<div class="col d-flex justify-content-end"><button class="btn btn-outline-success" @click="ExportToExcel()"><i class="bi bi-file-earmark-spreadsheet"></i>
+ Exportar</button></div>
 	</div>
 	<div class="row">
 		<div class="col" id="divRespuesta">
-			<tablePadresAptos :respuestas="respuestas"></tablePadresAptos>
+			<tablePadresAptos v-if="filtro.queReporte==1" :respuestas="respuestas"></tablePadresAptos>
+			<TablePadreReuniones v-if="filtro.queReporte==2 " :respuestas="respuestas"></TablePadreReuniones>
+			<TablePadresFaenas v-if="filtro.queReporte==3 " :respuestas="respuestas"></TablePadresFaenas>
 		</div>
 	</div>
 	
@@ -43,14 +50,17 @@
 <script>
 import moment from 'moment'
 import TablePadresAptos from '@/components/TablePadresAptos.vue'
+import TablePadresFaenas from '@/components/TablePadresFaenas.vue'
+import TablePadreReuniones from '@/components/TablePadreReuniones.vue'
 export default{
 	name: 'HomeReportes',
-	components:{ TablePadresAptos },
+	components:{ TablePadresAptos, TablePadreReuniones, TablePadresFaenas },
 	data() {
 		return {
-			respuestas:[], grados:[], filtro:{queReporte:1, idGrado:-1, año:moment().format('YYYY')}, años:[], reportes:[
+			respuestas:[], grados:[], filtro:{queReporte:1, dni:'', idGrado:-1, año:moment().format('YYYY')}, años:[], reportes:[
 				{id:1, clase: 'Padres aptos para votar'},
-				{id:2, clase: 'Padres no aptos para votar'},
+				{id:2, clase: 'Record de reuniones por padre'},
+				{id:3, clase: 'Record de faenas por padre'},
 			]
 		}
 	},
@@ -73,6 +83,7 @@ export default{
 			datos.append('pedir', 'buscar')
 			datos.append('idGrado', this.filtro.idGrado)
 			datos.append('año', this.filtro.año)
+			datos.append('dni', this.filtro.dni)
 			datos.append('queReporte', this.filtro.queReporte)
 			this.axios.post(this.servidor+'Reportes.php', datos)
 			.then(resp => this.respuestas = resp.data)

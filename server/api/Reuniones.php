@@ -8,6 +8,7 @@ switch ($_POST['pedir']) {
 	case 'detalles': detalles($datab); break;
 	case 'borrar': borrar($datab); break;
 	case 'matricular': matricular($datab); break;
+	case 'agregarDNI': agregarDNI($datab); break;
 	default: break;
 }
 
@@ -80,4 +81,38 @@ function matricular($db){
 	}
 	
 	
+}
+
+function agregarDNI($db){
+	$sql = $db->prepare("SELECT * from padre where dni = ? limit 1;");
+	$sql->execute([$_POST['dni']]);
+
+	$cantidad = $sql->rowCount();
+	if($cantidad == 0 ){
+		$sqlPadre = $db->prepare("INSERT INTO `padre`(`dni`,`idRelacion`) VALUES (?, 8)");
+		$sqlPadre -> execute([ $_POST['dni'] ]);
+		$idPadre = $db->lastInsertId();
+		$padre = [];
+	}else{
+		$padre = $sql->fetch(PDO::FETCH_ASSOC);
+		$idPadre = $padre['id'];
+	}
+
+	$sqlAsistencia = $db->prepare("SELECT * from asistencia where idReunion = ? and idPadre = ? and presente = 1;");
+	$sqlAsistencia->execute([ $_POST['idReunion'], $idPadre ]);
+	$duplicado = $sqlAsistencia->rowCount();
+	if($duplicado == 0){
+		$sqlRegistrar = $db->prepare("INSERT INTO `asistencia`(`idPadre`, `idReunion`,`registro`) VALUES (?, ?,  DATE_SUB(NOW(), INTERVAL 1 HOUR));");
+		$sqlRegistrar->execute([ $idPadre, $_POST['idReunion'] ]);
+	}
+
+	$filas = [];
+	$sqlAsistentes = $db->prepare("SELECT a.*, p.nombres, p.apellidos, p.dni FROM `asistencia` a inner join padre p on p.id = a.idPadre
+	where idReunion = ? and presente = 1
+	order by a.id desc;");
+	$sqlAsistentes->execute([ $_POST['idReunion'] ]);
+	while($row = $sqlAsistentes->fetch(PDO::FETCH_ASSOC))
+		$filas [] = $row;
+
+	echo json_encode( array('asistentes'=> $filas, 'dni'=>$_POST['dni']) );
 }

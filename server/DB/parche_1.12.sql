@@ -1,0 +1,2 @@
+ALTER TABLE `asistencia` CHANGE `observaciones` `observaciones` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '';
+ALTER TABLE `asistencia` ADD `activo` INT NULL DEFAULT '1' AFTER `registro`;

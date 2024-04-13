@@ -21,6 +21,7 @@
 				<option value="3">Familiar</option>
 				<option value="4">Hermandad</option>
 				<option value="5">Apoderado</option>
+				<option value="8">Sin especificar</option>
 			</select>
 
 			<div class="d-flex justify-content-between mt-2">

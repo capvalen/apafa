@@ -2,6 +2,7 @@
 	<div>
 		<h1>Detalle de faena</h1>
 		<h3>Asunto: {{ faena.asunto }} </h3>
+		<p><strong>Detalle:</strong> <span>{{ faena.detalles }}</span></p>
 		<h5>Fecha: {{ fechaLatam(faena.fecha) }} </h5>
 		<h5>Horario: {{ horaLatam(faena.inicio) }} - {{ horaLatam(faena.salida) }} </h5>
 		
@@ -118,8 +119,6 @@ export default{
 				const minutes = minutos % 60;
 				return `${hours} horas y ${minutes} minutos`
 			}
-
-
 		}
 	}
 }

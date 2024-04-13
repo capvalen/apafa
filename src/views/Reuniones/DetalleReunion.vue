@@ -6,16 +6,23 @@
 	<h5>Grado y sección: {{ reunion.grado }} de {{queNivel(reunion.idNivel)  }} </h5>
 	<p><strong>Detalles adicionales:</strong> {{ reunion.detalles }}</p>
 
-	<div class="d-flex justify-content-between">
-		<button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalAsistencias" @click="dniABuscar=''"><i class="bi bi-list-nested"></i> Registrar asistencia</button>
+	<div class="d-flex justify-content-end">
+		<!-- <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalAsistencias" @click="dniABuscar=''"><i class="bi bi-list-nested"></i> Registrar asistencia</button> -->
 		<button class="btn btn-outline-info" @click="cargarDatos()" ><i class="bi bi-arrow-clockwise"></i> Actualizar lista</button>
 	</div>
 	<hr>
+	<label for="">Ingrese DNI para registrarlo</label>
+	<div class="input-group mb-3">
+		<input type="text" class="form-control" id="txtDNI" v-model="dniNuevo" autocomplete="off" @keypress.enter="agregarDNI()">
+		<button class="btn btn-outline-secondary" type="button" @click="agregarDNI()"><i class="bi bi-plus-lg"></i> Agregar </button>
+	</div>
+	<hr>
 	<p>Apoderados asistentes:</p>
-	<table class="table table-hover">
+	<table class="table table-hover" v-if="asistentes.length>0">
 		<thead>
 			<tr>
 				<th>N°</th>
+				<th>DNI</th>
 				<th>Apellidos y nombres</th>
 				<th>Registro</th>
 				<th>@</th>
@@ -24,14 +31,16 @@
 		<tbody>
 			<tr v-for="(asistente, index) in asistentes">
 				<td>{{ index+1 }}</td>
+				<td>{{ asistente.dni }}</td>
 				<td class="text-capitalize">{{ asistente.apellidos }} {{ asistente.nombres }}</td>
-				<td>{{ asistente.registro }}</td>
+				<td>{{ fechaFormateada(asistente.registro) }}</td>
 				<td>
 					<button class="btn btn-outline-danger btn-sm" title="Borrar registro" @click="borrar(asistente.id, index)"><i class="bi bi-eraser"></i></button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
+	<p v-if="asistentes.length==0">No hay apoderados registrados actualmente</p>
 
 	<!-- Modal -->
 <div class="modal fade" id="modalAsistencias" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -60,9 +69,10 @@
 </template>
 <script>
 import moment from 'moment'
+const txtDNI = document.getElementById('txtDNI')
 export default{
 	data(){ return {
-		reunion:[], dniABuscar:'', noExiste:false, asistentes:[], hijos:[]
+		reunion:[], dniABuscar:'', noExiste:false, asistentes:[], hijos:[], dniNuevo:''
 	}},
 	mounted(){
 		this.cargarDatos()
@@ -90,6 +100,21 @@ export default{
 			const index = this.asistentes.findIndex(x=> x.id == id)
 			if(index == -1) return true
 			else return false
+		},
+		agregarDNI(){
+			if(this.dniNuevo!=''){
+				let datos = new FormData()
+				datos.append('pedir', 'agregarDNI')
+				datos.append('dni', this.dniNuevo)
+				datos.append('idReunion',  this.$route.params.idReunion)
+				this.axios.post(this.servidor + 'Reuniones.php', datos)
+				.then(resp =>{
+					this.asistentes = resp.data.asistentes
+					alertify.message('DNI Agregado: '+this.dniNuevo,5)
+					this.dniNuevo = ''
+					txtDNI.focus()
+				})
+			}
 		},
 		buscarDNI(){
 			if(this.dniABuscar!=''){
@@ -190,6 +215,9 @@ export default{
 				alertify.success('Datos actualizados', 5);
 			}, ()=>{});
 		},
+		fechaFormateada(fecha){
+			return moment(fecha, 'YYYY-MM-DD hh:mm:ss').format('DD/MM/YYYY hh:mm a')
+		}
 	}
 }
 </script>

@@ -3,6 +3,8 @@ include('conexion.php');
 
 switch ($_POST['queReporte']) {
 	case '1': padresAptos($datab); break;
+	case '2': padreVsReuniones($datab); break;
+	case '3': padreVsFaenas($datab); break;
 	default: break;
 }
 
@@ -30,4 +32,82 @@ function padresAptos($db){
 			$filas[] = $rows;
 		echo json_encode( $filas );
 	}
+}
+
+function padreVsReuniones($db){ 
+	$filas = [];
+
+	$sqlPadre = $db->prepare("SELECT * from padre where dni = ? and activo = 1 limit 1;");
+	$sqlPadre->execute([$_POST['dni']]);
+	$padre = $sqlPadre->fetch(PDO::FETCH_ASSOC);
+	$idPadre = $padre['id'];
+	$existe = $sqlPadre->rowCount();
+
+	$sqlReuniones = $db->prepare("SELECT * FROM `reunion`
+	where year(fecha) = ? and activo = 1 order by id desc;");
+	$sqlReuniones->execute([ $_POST['año'] ]);
+	while($rowReuniones = $sqlReuniones->fetch(PDO::FETCH_ASSOC)){
+		$sqlAsistencia =  $db->prepare("SELECT * FROM `asistencia`
+		where idPadre = ? and idReunion = ? and activo = 1 limit 1;");
+		//echo 'id '. $rowReuniones['id'];
+		$sqlAsistencia->execute([$idPadre, $rowReuniones['id']]);
+		$asistio = $sqlAsistencia->rowCount();
+		if($asistio == 0){ //Falta
+			$filas[] = array(
+				'idReunion'=> $rowReuniones['id'],
+				'asunto' => $rowReuniones['asunto'],
+				'presente' => 0
+			);
+		}else{
+			$rowAsistencia = $sqlAsistencia->fetch(PDO::FETCH_ASSOC);
+			$filas[] = array(
+				'idReunion'=> $rowReuniones['id'],
+				'asunto' => $rowReuniones['asunto'],
+				'presente' => 1,
+				'fecha' => $rowAsistencia['registro']
+			);
+		}
+	}
+	echo json_encode( array('reuniones' => $filas, 'dni'=>$_POST['dni'], 'existe'=>$existe, 'apoderado' => $padre) ); 
+}
+
+function padreVsFaenas($db){ 
+	$filas = [];
+
+	$sqlPadre = $db->prepare("SELECT * from padre where dni = ? and activo = 1 limit 1;");
+	$sqlPadre->execute([$_POST['dni']]);
+	$padre = $sqlPadre->fetch(PDO::FETCH_ASSOC);
+	$idPadre = $padre['id'];
+	$existe = $sqlPadre->rowCount();
+
+	$sqlFaenas = $db->prepare("SELECT `id`, `asunto`, `detalles`, DATE(inicio) as fecha, TIME(inicio) as inicio, time( `salida` ) as salida, `activo` FROM `faenas`
+	where year(inicio) = ? and activo = 1 order by id desc;");
+	$sqlFaenas->execute([ $_POST['año'] ]);
+	while($rowFaenas = $sqlFaenas->fetch(PDO::FETCH_ASSOC)){
+		$sqlTrabajador =  $db->prepare("SELECT *,  TIME(entrada) as ingreso FROM `trabajadores`
+		where idPadre = ? and idFaena = ? and activo = 1 limit 1;");
+		//echo 'id '. $rowFaenas['id'];
+		$sqlTrabajador->execute([$idPadre, $rowFaenas['id']]);
+		$asistio = $sqlTrabajador->rowCount();
+		if($asistio == 0){ //Falta
+			$filas[] = array(
+				'idFaena'=> $rowFaenas['id'],
+				'asunto' => $rowFaenas['asunto'],
+				'presente' => 0
+			);
+		}else{
+			$rowAsistencia = $sqlTrabajador->fetch(PDO::FETCH_ASSOC);
+			$filas[] = array(
+				'idFaena'=> $rowFaenas['id'],
+				'asunto' => $rowFaenas['asunto'],
+				'presente' => 1,
+				'inicio'=> $rowFaenas['inicio'],
+				'salida'=> $rowFaenas['salida'],
+				'ingreso'=> $rowAsistencia['ingreso'],
+				'minutos'=> $rowAsistencia['minutos'],
+				'fecha' => $rowAsistencia['entrada']
+			);
+		}
+	}
+	echo json_encode( array('faenas' => $filas, 'dni'=>$_POST['dni'], 'existe'=>$existe, 'apoderado' => $padre) ); 
 }
